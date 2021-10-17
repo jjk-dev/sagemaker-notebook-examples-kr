@@ -1,1 +1,1 @@
-# sagemaker-notebook-examples
+# sagemaker-notebook-examples-kr
