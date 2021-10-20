@@ -28,14 +28,14 @@ def tfhub_to_savedmodel(model_name, export_path,
     model_path = '{}/{}/00000001'.format(export_path, model_name)
     tfhub_uri = uri_pattern.format(model_name)
 
-    with tf.Session(graph=tf.Graph()) as sess:
+    with tf.compat.v1.Session(graph=tf.Graph()) as sess:
         module = hub.Module(tfhub_uri) 
         input_params = module.get_input_info_dict()                
         dtype = input_params['images'].dtype
         shape = input_params['images'].get_shape()
 
         # define the model inputs
-        inputs = {'images': tf.placeholder(dtype, shape, 'images')}
+        inputs = {'images': tf.compat.v1.placeholder(dtype, shape, 'images')}
 
         # define the model outputs
         # we want the class ids and probabilities for the top 3 classes
@@ -48,8 +48,8 @@ def tfhub_to_savedmodel(model_name, export_path,
         }
 
         # export the model
-        sess.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        tf.saved_model.simple_save(
+        sess.run([tf.compat.v1.global_variables_initializer(), tf.compat.v1.tables_initializer()])
+        tf.compat.v1.saved_model.simple_save(
             sess,
             model_path,
             inputs=inputs,
@@ -103,4 +103,3 @@ def print_probabilities_and_labels(labelled_result):
                 pred['labels'][i],
             ))
         print()
-        
